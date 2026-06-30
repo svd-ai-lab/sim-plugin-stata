@@ -84,6 +84,26 @@ uv run sim check stata
 uv run sim run --solver stata fixtures/stata_ok.do
 ```
 
+## References & prior art
+
+`sim-plugin-stata` is a sim-cli adapter, not a reimplementation of the broader
+Stata-for-agents ecosystem. These independent projects are worth a look — for
+ideas, comparison, or to use alongside this plugin:
+
+- [haoyu-haoyu/stata-ai-fusion](https://github.com/haoyu-haoyu/stata-ai-fusion)
+  — MCP server + a layered Stata **skill** knowledge base (econometrics, causal
+  inference, survival analysis) + a VS Code extension. A good reference for how
+  to organize Stata domain knowledge as a progressive-disclosure skill.
+- [SepineTam/stata-mcp](https://github.com/SepineTam/stata-mcp) — agent-focused
+  MCP server with a command-safety guard and RAM monitoring; the inspiration
+  for this plugin's shell-out safety guard.
+- [hanlulong/stata-mcp](https://github.com/hanlulong/stata-mcp) — popular Stata
+  MCP extension for VS Code / Cursor / Antigravity.
+
+They are complementary: if any are present in your agent environment, combine
+them with this plugin; `sim-plugin-stata` continues to provide the `sim` driver
+interface (batch CLI + pystata) regardless.
+
 ## License
 
 Apache-2.0. See [LICENSE](LICENSE) and [LICENSE-NOTICE.md](LICENSE-NOTICE.md).

@@ -1,0 +1,54 @@
+# sim-cli — Stata driver compatibility matrix.
+#
+# Stata has a first-party Python API, `pystata`, that ships INSIDE every
+# Stata 17+ installation under `<install>/utilities/pystata`. Unlike MATLAB's
+# `matlabengine` (a versioned PyPI package), pystata is NOT installed from
+# PyPI — the driver puts `<install>/utilities` on sys.path and calls
+# `pystata.config.init(<edition>)`. So there is no separate SDK pin: the
+# pystata version always matches the Stata install it ships with.
+#
+# Editions: MP (StataMP) > SE (StataSE) > BE (StataBE). IC was renamed BE in
+# Stata 17. pystata's config.init accepts 'mp' / 'se' / 'be'.
+#
+# Python-version note (sessions only): pystata loads Stata's `stata_plugin` C
+# bridge into the running interpreter, so persistent sessions require a Python
+# version StataCorp built that Stata release for (Stata 19 -> CPython <= 3.13
+# as of 2026). One-shot batch `.do` runs shell out to the Stata binary and work
+# on any Python version.
+#
+# Detection inputs (see driver.py detect_installed):
+#   - STATA_ROOT / STATABIN env vars
+#   - which StataMP-64 / stata-mp (PATH probe)
+#   - C:\Program Files\Stata19\StataMP-64.exe   (Windows default)
+#   - /usr/local/stata18/stata-mp               (Linux default)
+#   - /Applications/Stata/StataMP.app           (macOS default)
+#   - major version read from the install directory name (Stata19 -> 19)
+
+driver: stata
+sdk_package: pystata        # bundled with Stata; not a PyPI install
+
+profiles:
+
+  - name: stata_19_pystata_bundled
+    sdk: "bundled"
+    solver_versions: ["19"]
+    active_solver_layer: "19"
+    notes: |
+      Stata 19 / StataNow 19 + bundled pystata. Latest tested as of 2026 Q2.
+      Validated live on Windows (StataMP-64) for both batch `/e do` runs and
+      a persistent pystata session.
+
+  - name: stata_18_pystata_bundled
+    sdk: "bundled"
+    solver_versions: ["18"]
+    active_solver_layer: "18"
+    notes: |
+      Stata 18 + bundled pystata.
+
+  - name: stata_17_pystata_bundled
+    sdk: "bundled"
+    solver_versions: ["17"]
+    active_solver_layer: "17"
+    notes: |
+      Stata 17 + bundled pystata. First Stata release to ship pystata and to
+      rename the IC edition to BE.

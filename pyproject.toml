@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sim-plugin-stata"
+version = "0.1.0"
+description = "Stata statistics/econometrics driver for sim-cli, distributed as a plugin"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+authors = [{ name = "Weiqi Ji", email = "jiweiqi10@gmail.com" }]
+keywords = ["stata", "statistics", "econometrics", "pystata", "sim-cli", "plugin"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "sim-cli-core>=0.3",
+]
+
+# NOTE: there is no `session` extra. pystata is NOT a PyPI package — it ships
+# inside the Stata installation under `<install>/utilities/pystata`, and the
+# driver puts that on sys.path at launch time. See compatibility.yaml.
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7",
+    "build>=1.0",
+]
+
+[project.entry-points."sim.drivers"]
+stata = "sim_plugin_stata:StataDriver"
+
+[project.entry-points."sim.skills"]
+stata = "sim_plugin_stata:skills_dir"
+
+[project.entry-points."sim.plugins"]
+stata = "sim_plugin_stata:plugin_info"
+
+[project.urls]
+Homepage = "https://github.com/svd-ai-lab/sim-plugin-stata"
+Repository = "https://github.com/svd-ai-lab/sim-plugin-stata"
+Issues = "https://github.com/svd-ai-lab/sim-plugin-stata/issues"
+Changelog = "https://github.com/svd-ai-lab/sim-plugin-stata/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sim_plugin_stata"]
+# Ship the bundled skill files and compatibility.yaml as package data.
+include = ["src/sim_plugin_stata/**"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "integration: tests that build wheels or touch external tooling",
+]

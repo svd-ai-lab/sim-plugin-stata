@@ -37,6 +37,18 @@ pystata ships **inside** every Stata 17+ install at
 `sys.path` at launch — there is nothing to `pip install`. See
 [`compatibility.yaml`](../../compatibility.yaml).
 
+**Before opening a session, check the active Python version.** pystata loads
+Stata's `stata_plugin` C bridge into the *running* interpreter, so a session
+only works on a Python version StataCorp built that Stata release for
+(Stata 19 → CPython ≤ 3.13 as of 2026; newer Stata releases extend the range).
+Detect it up front — run `python --version` (or `uv run python --version`) and
+confirm it is within the range the installed Stata supports before
+`uv run sim connect`. If a session fails at init with
+`No module named 'stata_plugin'`, the active Python is too new: run sim from a
+supported interpreter, or fall back to one-shot batch `uv run sim run` (which
+shells out to the Stata binary and is **version-independent**). See
+[`base/reference/stata_driver.md`](base/reference/stata_driver.md#python-version-constraint-for-sessions).
+
 ## Stata-specific hard constraints
 
 These add to — do not replace — the shared skill's hard constraints.

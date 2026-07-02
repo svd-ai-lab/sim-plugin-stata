@@ -1,23 +1,31 @@
 ---
 name: stata-sim
-description: Use when running Stata `.do` files or driving a persistent Stata session through sim-cli's Stata plugin — one-shot batch via `uv run sim run --solver stata`, local persistent sessions via `uv run sim connect --solver stata` (powered by the bundled pystata API), explicit JSON result extraction from the Stata log, a safety guard that blocks shell-outs, and conservative handling of Stata data/log state. There is no GUI automation — Stata is driven headless through its batch CLI and pystata only.
+description: Use when running Stata `.do` files, checking a local Stata install, or driving Stata through the simplest real headless path. Choose direct Stata batch CLI or pystata when available, and use sim-cli's Stata plugin when standardized execution, persistent sessions, diagnostics, JSON extraction, safety guards, and artifact handling are useful. There is no GUI automation; Stata is driven headless through its batch CLI and pystata only.
 ---
 
 # stata-sim
 
-You are driving **Stata** via the sim Stata plugin. This skill is
-self-contained for Stata-specific work: one-shot batch runs, local
-persistent pystata sessions, version/edition probing, the log-based output
-convention, the shell-out safety guard, and acceptance/escalation points.
+You are working with **Stata**. This skill is self-contained for Stata-specific
+work: direct local availability probing, one-shot batch runs, local persistent
+pystata sessions, version/edition probing, the log-based output convention, the
+shell-out safety guard, and acceptance/escalation points.
 
-Start every real task with:
+Before requiring sim-cli, verify the intended Stata control path from direct
+local evidence: a user-provided path, Stata batch executables on `PATH`, common
+Stata install roots, or a visible `<install>/utilities/pystata` package for the
+installed edition. Missing sim-cli is not evidence that Stata is missing. When
+sim-cli is already selected/available or the task needs run history,
+standardized validation, persistent sessions, JSON extraction, safety guards,
+or plugin diagnostics, run:
 
 ```bash
 uv run sim check stata
 ```
 
-For one-shot execution, use `uv run sim run --solver stata <file.do>`. For a
-local persistent session, use `uv run sim connect --solver stata`, then bounded
+For direct one-shot execution, Stata's batch CLI is a valid smoke path when it
+is visible in the current runtime. For one-shot execution through sim-cli, use
+`uv run sim run --solver stata <file.do>`. For a local persistent session
+through sim-cli, use `uv run sim connect --solver stata`, then bounded
 `uv run sim exec` snippets, then `uv run sim disconnect`.
 
 **No GUI.** This plugin never automates the Stata GUI. Batch runs go through

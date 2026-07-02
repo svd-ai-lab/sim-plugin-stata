@@ -19,7 +19,7 @@ environment:
 
 ```powershell
 uv init  # only if this is not already a uv project
-uv add sim-cli-core sim-plugin-stata
+uv add sim-cli-core "sim-plugin-stata @ git+https://github.com/svd-ai-lab/sim-plugin-stata.git@main"
 uv run sim plugin sync-skills --target .agents/skills --copy
 uv run sim check stata
 uv run sim plugin doctor stata --deep
